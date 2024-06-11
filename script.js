@@ -4,7 +4,8 @@ para=document.getElementById('para')
 button=document.getElementById("button")
 speach=document.getElementById('but')
 par=document.getElementById('par')
-let isspeack=false
+let isSpeaking=false
+restartbut=document.getElementById("rebut")
 
 function getrandomnum(){
     return Math.ceil(Math.random() *90)
@@ -31,12 +32,8 @@ for(i=1;i<=rows;i++)
 }
 table.appendChild(row)
 }
-for(i=1;i<=90;i++)
-{      
-   
-}
 
-         
+     
     
   
     function start(){
@@ -47,24 +44,31 @@ for(i=1;i<=90;i++)
             }while(list.includes(randomnumber))
                 list.push(randomnumber)
                 console.log(randomnumber)
+                console.log(list)
         
       
       
         para.textContent=randomnumber
       
         button.textContent="Next"
-        speak()
+        if(!isSpeaking){
+            speakNumber()
+        }
+  
+      
        
         pre()
         function pre(){
             pindex=list.indexOf(parseInt(para.textContent))
             par.textContent=list[pindex-1]
-            console.log(list[pindex-1])
+            console.log(par.textContent)
         }  
         for( let row of table.rows)
             {
                 for(let cell of row.cells){
                     if(cell.textContent==String(randomnumber)){
+                      
+                       cell.classList.remove('rechange')
                      
                         cell.classList.add('change');
                        
@@ -73,46 +77,79 @@ for(i=1;i<=90;i++)
                 }
               
             }
-            function toggle(){
-                if(!isspeack)
-                    {
-                       speak() 
-                    }
-                    else{
-                        cancelspeak()
-                    }
-            }
-        
-            function speak()
-            {
-             
-                console.log("tarun")
-                const sync=window.speechSynthesis
-                const utterence=new SpeechSynthesisUtterance(para.textContent)
-                sync.speak(utterence)
-                isspeack=true
-                speach.textContenta="mute"
-                
-                
-               
-            }
-            function cancelspeak()
-            {
-                console.log("sai")
-                const sync=window.speechSynthesis
-                sync.cancel()
-                isspeack=false
-                speach.textContent="unmute"
-           
-            }
-            speach.addEventListener('click', toggle);
             
+          
+            
+          
+            
+            // Add event listener to the speech button
+                    
            
             
            
            
           
     }
+    function toggle() {
+        if(!isSpeaking){
+            isSpeaking=true
+        }
+        else{
+            isSpeaking=false
+        }
+       
+        if (!isSpeaking) {
+            speakNumber();
+          
+         
+        } else {
+            cancelSpeech();
+          
+        }
+    }
+      // Speak the current number
+      function speakNumber() {
+        console.log("Speaking number");
+        const synth = window.speechSynthesis;
+        const utterance = new SpeechSynthesisUtterance(para.textContent);
+        synth.speak(utterance);
+       
+ 
+        speach.textContent = "mute";
+      
+    }
+    // Cancel speech synthesis
+    function cancelSpeech() {
+        console.log("Cancel speech");
+        const synth = window.speechSynthesis;
+        synth.cancel();
+       
+     
+        speach.textContent = "unmute";
+    }
+    speach.addEventListener('click', toggle); 
+function restart(){
+    console.log('tarun')
+    list=[]
+    para.textContent=''
+    par.textContent=''
+    for( let row of table.rows)
+        {
+            for(let cell of row.cells){
+                 
+                    cell.classList.remove('change');
+                   
+                   
+            
+            }
+          
+        }
+        button.textContent="Start"
+ 
+    console.log(list)
+}
+
+    restartbut.addEventListener('click',restart)
   
    
     
